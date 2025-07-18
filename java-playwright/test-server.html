@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test E-Commerce App</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .header { background: #333; color: white; padding: 20px; text-align: center; }
+        .hero { background: #f4f4f4; padding: 40px; text-align: center; }
+        .search-bar { margin: 20px 0; }
+        .search-bar input { padding: 10px; width: 300px; }
+        .search-bar button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header data-testid="header" class="header">
+        <h1>Test E-Commerce Store</h1>
+        <nav>
+            <a href="#" style="color: white; margin: 0 10px;">Home</a>
+            <a href="#" style="color: white; margin: 0 10px;">Products</a>
+            <a href="#" style="color: white; margin: 0 10px;">Cart</a>
+            <a href="#" style="color: white; margin: 0 10px;">Login</a>
+        </nav>
+    </header>
+
+    <section data-testid="hero-section" class="hero">
+        <h2>Welcome to our Test Store</h2>
+        <p>Find the best products at great prices</p>
+
+        <div class="search-bar">
+            <input type="text" data-testid="search-input" placeholder="Search products...">
+            <button data-testid="search-button">Search</button>
+        </div>
+    </section>
+
+    <main>
+        <h3>Featured Products</h3>
+        <div data-testid="products-section">
+            <p>Product listings would go here...</p>
+        </div>
+    </main>
+</body>
+</html>
+

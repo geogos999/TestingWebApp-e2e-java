@@ -1,9 +1,11 @@
 package com.ecommerce.pages;
 
+import com.ecommerce.config.TestConfig;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
+import org.aeonbits.owner.ConfigFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +19,8 @@ import java.nio.file.Paths;
 public abstract class BasePage {
     protected final Page page;
     protected final Logger logger;
-    
+    protected static final TestConfig config = ConfigFactory.create(TestConfig.class);
+
     // Common timeouts
     protected static final int DEFAULT_TIMEOUT = 10000;
     protected static final int LONG_TIMEOUT = 30000;
@@ -30,11 +33,29 @@ public abstract class BasePage {
     // Navigation methods
     @Step("Navigate to URL: {url}")
     public void navigateTo(String url) {
-        logger.info("Navigating to: {}", url);
-        page.navigate(url);
+        String fullUrl = buildFullUrl(url);
+        logger.info("Navigating to: {}", fullUrl);
+        page.navigate(fullUrl);
         waitForPageLoad();
     }
     
+    /**
+     * Build full URL from relative path or return absolute URL as-is
+     */
+    private String buildFullUrl(String url) {
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            return url;
+        }
+        String baseUrl = config.baseUrl();
+        if (baseUrl.endsWith("/") && url.startsWith("/")) {
+            return baseUrl + url.substring(1);
+        } else if (!baseUrl.endsWith("/") && !url.startsWith("/")) {
+            return baseUrl + "/" + url;
+        } else {
+            return baseUrl + url;
+        }
+    }
+
     @Step("Wait for page to load")
     public void waitForPageLoad() {
         page.waitForLoadState();
@@ -101,13 +122,15 @@ public abstract class BasePage {
     public Locator waitForElementVisible(String selector) {
         return waitForElementVisible(selector, DEFAULT_TIMEOUT);
     }
-    
+
     @Step("Wait for element to be visible: {selector} with timeout: {timeout}ms")
     public Locator waitForElementVisible(String selector, int timeout) {
         logger.info("Waiting for element to be visible: {} (timeout: {}ms)", selector, timeout);
-        return page.waitForSelector(selector, new Page.WaitForSelectorOptions()
+        Locator locator = page.locator(selector);
+        locator.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.VISIBLE)
                 .setTimeout(timeout));
+        return locator;
     }
     
     @Step("Wait for element to be hidden: {selector}")

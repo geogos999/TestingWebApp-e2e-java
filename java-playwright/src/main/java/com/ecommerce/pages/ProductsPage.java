@@ -3,6 +3,7 @@ package com.ecommerce.pages;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 
+
 /**
  * Products page object containing all elements and actions for the products listing page.
  * This class implements the Page Object Model pattern for the products functionality.

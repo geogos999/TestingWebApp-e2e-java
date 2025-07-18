@@ -26,6 +26,7 @@
         <jackson.version>2.15.2</jackson.version>
         <maven.surefire.version>3.1.2</maven.surefire.version>
         <maven.compiler.version>3.11.0</maven.compiler.version>
+        <aspectj.version>1.9.19</aspectj.version>
     </properties>
 
     <dependencies>
@@ -48,6 +49,13 @@
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-junit5</artifactId>
             <version>${allure.version}</version>
+        </dependency>
+
+        <!-- AspectJ weaver for AOP support -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
         </dependency>
 
         <!-- Logging -->
@@ -109,13 +117,6 @@
                         <include>**/*Tests.java</include>
                     </includes>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.aspectj</groupId>
-                        <artifactId>aspectjweaver</artifactId>
-                        <version>1.9.19</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
             <!-- Allure Maven Plugin -->
