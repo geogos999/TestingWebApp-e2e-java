@@ -184,6 +184,7 @@ Configure tests using system properties:
 ### Test Structure
 ```java
 @Test
+@Order(1)
 @DisplayName("Descriptive test name")
 @Description("Detailed test description")
 @Severity(SeverityLevel.CRITICAL)
