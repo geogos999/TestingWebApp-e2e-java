@@ -14,6 +14,6 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = FEATURES_PROPERTY_NAME, value = "src/test/resources/features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.ecommerce.stepDefinitions,com.ecommerce.hooks")
-@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty,html:target/cucumber-reports,json:target/cucumber-reports/Cucumber.json,junit:target/cucumber-reports/Cucumber.xml,io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm")
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty,html:build/reports/cucumber/cucumber.html,json:build/reports/cucumber/cucumber.json,junit:build/reports/cucumber/cucumber.xml,io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm")
 public class TestRunner {
 }

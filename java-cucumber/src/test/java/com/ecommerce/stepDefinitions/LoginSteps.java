@@ -2,23 +2,25 @@ package com.ecommerce.stepDefinitions;
 
 import com.ecommerce.pageObjects.HomePage;
 import com.ecommerce.pageObjects.LoginPage;
-import com.ecommerce.utils.WebDriverManager;
+import com.ecommerce.utils.DriverManager;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
-import com.microsoft.playwright.Page;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class LoginSteps {
 
-    private final WebDriverManager driverManager;
+    private final DriverManager driverManager;
     private final HomePage homePage;
     private final LoginPage loginPage;
-    private Page page;
+    private WebDriver driver;
 
-    public LoginSteps(WebDriverManager driverManager) {
+    public LoginSteps(DriverManager driverManager) {
         this.driverManager = driverManager;
-        this.page = driverManager.getPage();
-        this.homePage = new HomePage(page);
-        this.loginPage = new LoginPage(page);
+        this.driver = driverManager.getDriver();
+        this.homePage = new HomePage(driver, driverManager.getWait());
+        this.loginPage = new LoginPage(driver, driverManager.getWait());
     }
 
     @Given("I am on the e-commerce homepage")
@@ -75,8 +77,12 @@ public class LoginSteps {
 
     @Then("I should see the user dashboard")
     public void i_should_see_the_user_dashboard() {
-        Assertions.assertTrue(page.locator("[data-testid='user-dashboard']").isVisible(),
-                "User dashboard should be visible");
+        try {
+            WebElement userDashboard = driver.findElement(By.cssSelector("[data-testid='user-dashboard']"));
+            Assertions.assertTrue(userDashboard.isDisplayed(), "User dashboard should be visible");
+        } catch (Exception e) {
+            Assertions.fail("User dashboard should be visible but was not found");
+        }
     }
 
     @Then("I should see an error message {string}")
@@ -95,11 +101,19 @@ public class LoginSteps {
     public void i_should_see(String expectedResult) {
         if (expectedResult.contains("dashboard")) {
             if (expectedResult.contains("user")) {
-                Assertions.assertTrue(page.locator("[data-testid='user-dashboard']").isVisible(),
-                        "User dashboard should be visible");
+                try {
+                    WebElement userDashboard = driver.findElement(By.cssSelector("[data-testid='user-dashboard']"));
+                    Assertions.assertTrue(userDashboard.isDisplayed(), "User dashboard should be visible");
+                } catch (Exception e) {
+                    Assertions.fail("User dashboard should be visible but was not found");
+                }
             } else if (expectedResult.contains("admin")) {
-                Assertions.assertTrue(page.locator("[data-testid='admin-dashboard']").isVisible(),
-                        "Admin dashboard should be visible");
+                try {
+                    WebElement adminDashboard = driver.findElement(By.cssSelector("[data-testid='admin-dashboard']"));
+                    Assertions.assertTrue(adminDashboard.isDisplayed(), "Admin dashboard should be visible");
+                } catch (Exception e) {
+                    Assertions.fail("Admin dashboard should be visible but was not found");
+                }
             }
         } else {
             // It's an error message

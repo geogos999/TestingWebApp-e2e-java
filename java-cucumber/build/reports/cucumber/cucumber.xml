@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Cucumber" time="373.554" tests="13" skipped="0" failures="13" errors="0">
+<testcase classname="User Login" name="Successful login with valid credentials" time="55.28">
+<failure type="org.opentest4j.AssertionFailedError" message="Login should be successful ==&gt; expected: &lt;true&gt; but was: &lt;false&gt;">
+<![CDATA[org.opentest4j.AssertionFailedError: Login should be successful ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+	at com.ecommerce.stepDefinitions.LoginSteps.i_should_be_logged_in_successfully(LoginSteps.java:75)
+	at ?.I should be logged in successfully(file:///C:/Users/Geo%20NZXT/Documents/HOMELAB_DEVOPS/Git%20Repos/TestingWebApp-e2e-java/java-cucumber/src/test/resources/features/login.feature:15)
+]]>
+</failure>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I navigate to the login page...........................................passed
+And I enter valid username "user@example.com"...............................passed
+And I enter valid password "password123"....................................passed
+And I click the login button................................................passed
+Then I should be logged in successfully.....................................failed
+And I should see the user dashboard.........................................skipped
+]]></system-out>
+</testcase>
+<testcase classname="User Login" name="Failed login with invalid credentials" time="54.141">
+<failure type="org.opentest4j.AssertionFailedError" message="Expected error message: Invalid credentials, but got:  ==&gt; expected: &lt;true&gt; but was: &lt;false&gt;">
+<![CDATA[org.opentest4j.AssertionFailedError: Expected error message: Invalid credentials, but got:  ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+	at com.ecommerce.stepDefinitions.LoginSteps.i_should_see_an_error_message(LoginSteps.java:91)
+	at ?.I should see an error message "Invalid credentials"(file:///C:/Users/Geo%20NZXT/Documents/HOMELAB_DEVOPS/Git%20Repos/TestingWebApp-e2e-java/java-cucumber/src/test/resources/features/login.feature:24)
+]]>
+</failure>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I navigate to the login page...........................................passed
+And I enter invalid username "invalid@example.com"..........................passed
+And I enter invalid password "wrongpassword"................................passed
+And I click the login button................................................passed
+Then I should see an error message "Invalid credentials"....................failed
+And I should remain on the login page.......................................skipped
+]]></system-out>
+</testcase>
+<testcase classname="User Login" name="Login attempts with different credential combinations - Example #1.1" time="44.058">
+<failure type="org.opentest4j.AssertionFailedError" message="User dashboard should be visible but was not found">
+<![CDATA[org.opentest4j.AssertionFailedError: User dashboard should be visible but was not found
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at com.ecommerce.stepDefinitions.LoginSteps.i_should_see(LoginSteps.java:108)
+	at ?.I should see "user dashboard"(file:///C:/Users/Geo%20NZXT/Documents/HOMELAB_DEVOPS/Git%20Repos/TestingWebApp-e2e-java/java-cucumber/src/test/resources/features/login.feature:33)
+]]>
+</failure>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I navigate to the login page...........................................passed
+And I enter username "user@example.com".....................................passed
+And I enter password "password123"..........................................passed
+And I click the login button................................................passed
+Then I should see "user dashboard"..........................................failed
+]]></system-out>
+</testcase>
+<testcase classname="User Login" name="Login attempts with different credential combinations - Example #1.2" time="44.07">
+<failure type="org.opentest4j.AssertionFailedError" message="Admin dashboard should be visible but was not found">
+<![CDATA[org.opentest4j.AssertionFailedError: Admin dashboard should be visible but was not found
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at com.ecommerce.stepDefinitions.LoginSteps.i_should_see(LoginSteps.java:115)
+	at ?.I should see "admin dashboard"(file:///C:/Users/Geo%20NZXT/Documents/HOMELAB_DEVOPS/Git%20Repos/TestingWebApp-e2e-java/java-cucumber/src/test/resources/features/login.feature:33)
+]]>
+</failure>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I navigate to the login page...........................................passed
+And I enter username "admin@example.com"....................................passed
+And I enter password "admin123".............................................passed
+And I click the login button................................................passed
+Then I should see "admin dashboard".........................................failed
+]]></system-out>
+</testcase>
+<testcase classname="User Login" name="Login attempts with different credential combinations - Example #1.3" time="54.071">
+<failure type="org.opentest4j.AssertionFailedError" message="Expected: Invalid credentials, but got:  ==&gt; expected: &lt;true&gt; but was: &lt;false&gt;">
+<![CDATA[org.opentest4j.AssertionFailedError: Expected: Invalid credentials, but got:  ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+	at com.ecommerce.stepDefinitions.LoginSteps.i_should_see(LoginSteps.java:121)
+	at ?.I should see "Invalid credentials"(file:///C:/Users/Geo%20NZXT/Documents/HOMELAB_DEVOPS/Git%20Repos/TestingWebApp-e2e-java/java-cucumber/src/test/resources/features/login.feature:33)
+]]>
+</failure>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I navigate to the login page...........................................passed
+And I enter username "invalid@test.com".....................................passed
+And I enter password "wrongpass"............................................passed
+And I click the login button................................................passed
+Then I should see "Invalid credentials".....................................failed
+]]></system-out>
+</testcase>
+<testcase classname="User Login" name="Login attempts with different credential combinations - Example #1.4" time="54.2">
+<failure type="org.opentest4j.AssertionFailedError" message="Expected: Username is required, but got:  ==&gt; expected: &lt;true&gt; but was: &lt;false&gt;">
+<![CDATA[org.opentest4j.AssertionFailedError: Expected: Username is required, but got:  ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+	at com.ecommerce.stepDefinitions.LoginSteps.i_should_see(LoginSteps.java:121)
+	at ?.I should see "Username is required"(file:///C:/Users/Geo%20NZXT/Documents/HOMELAB_DEVOPS/Git%20Repos/TestingWebApp-e2e-java/java-cucumber/src/test/resources/features/login.feature:33)
+]]>
+</failure>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I navigate to the login page...........................................passed
+And I enter username "".....................................................passed
+And I enter password "password123"..........................................passed
+And I click the login button................................................passed
+Then I should see "Username is required"....................................failed
+]]></system-out>
+</testcase>
+<testcase classname="User Login" name="Login attempts with different credential combinations - Example #1.5" time="54.064">
+<failure type="org.opentest4j.AssertionFailedError" message="Expected: Password is required, but got:  ==&gt; expected: &lt;true&gt; but was: &lt;false&gt;">
+<![CDATA[org.opentest4j.AssertionFailedError: Expected: Password is required, but got:  ==> expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:63)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:36)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:214)
+	at com.ecommerce.stepDefinitions.LoginSteps.i_should_see(LoginSteps.java:121)
+	at ?.I should see "Password is required"(file:///C:/Users/Geo%20NZXT/Documents/HOMELAB_DEVOPS/Git%20Repos/TestingWebApp-e2e-java/java-cucumber/src/test/resources/features/login.feature:33)
+]]>
+</failure>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I navigate to the login page...........................................passed
+And I enter username "user@example.com".....................................passed
+And I enter password "".....................................................passed
+And I click the login button................................................passed
+Then I should see "Password is required"....................................failed
+]]></system-out>
+</testcase>
+<testcase classname="Product Search and Shopping" name="Search for a product successfully" time="2.564">
+<failure/>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I search for "laptop"..................................................undefined
+Then I should see search results for "laptop"...............................skipped
+And the results should contain product information..........................skipped
+]]></system-out>
+</testcase>
+<testcase classname="Product Search and Shopping" name="Add product to shopping cart" time="2.132">
+<failure/>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+Given I search for "phone"..................................................undefined
+And I see search results for "phone"........................................skipped
+When I click on the first product...........................................skipped
+And I add the product to cart...............................................skipped
+Then the product should be added to cart....................................skipped
+And the cart count should increase..........................................skipped
+]]></system-out>
+</testcase>
+<testcase classname="Product Search and Shopping" name="Search for different product categories - Example #1.1" time="2.087">
+<failure/>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I search for "laptop"..................................................undefined
+Then I should see search results for "laptop"...............................skipped
+And the results should show "3" or more products............................skipped
+]]></system-out>
+</testcase>
+<testcase classname="Product Search and Shopping" name="Search for different product categories - Example #1.2" time="2.093">
+<failure/>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I search for "phone"...................................................undefined
+Then I should see search results for "phone"................................skipped
+And the results should show "5" or more products............................skipped
+]]></system-out>
+</testcase>
+<testcase classname="Product Search and Shopping" name="Search for different product categories - Example #1.3" time="2.089">
+<failure/>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I search for "headphones"..............................................undefined
+Then I should see search results for "headphones"...........................skipped
+And the results should show "2" or more products............................skipped
+]]></system-out>
+</testcase>
+<testcase classname="Product Search and Shopping" name="Search for different product categories - Example #1.4" time="2.086">
+<failure/>
+<system-out><![CDATA[
+Given I am on the e-commerce homepage.......................................passed
+When I search for "tablet"..................................................undefined
+Then I should see search results for "tablet"...............................skipped
+And the results should show "4" or more products............................skipped
+]]></system-out>
+</testcase>
+</testsuite>

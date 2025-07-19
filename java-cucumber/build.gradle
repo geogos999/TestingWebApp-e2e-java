@@ -1,0 +1,178 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.11.2'
+}
+
+group = 'com.ecommerce'
+version = '1.0.0'
+description = 'Cucumber BDD tests with Selenium WebDriver for E-Commerce application'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+    aspectjAgent
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    seleniumVersion = '4.34.0'
+    seleniumDevToolsVersion = '4.34.0'
+    webdrivermanagerVersion = '5.6.2'
+    cucumberVersion = '7.15.0'
+    junitVersion = '5.10.0'
+    allureVersion = '2.24.0'
+    slf4jVersion = '2.0.9'
+    jacksonVersion = '2.15.2'
+    aspectjVersion = '1.9.19'
+}
+
+dependencies {
+    // Selenium WebDriver
+    implementation "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+    implementation "org.seleniumhq.selenium:selenium-devtools-v138:${seleniumDevToolsVersion}"
+
+    // WebDriverManager for automatic driver management
+    implementation "io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}"
+
+    // Cucumber
+    implementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-picocontainer:${cucumberVersion}"
+
+    // JUnit 5
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+    testImplementation "org.junit.platform:junit-platform-suite:1.10.0"
+
+    // Allure Cucumber Integration
+    testImplementation "io.qameta.allure:allure-cucumber7-jvm:${allureVersion}"
+
+    // Logging
+    implementation "org.slf4j:slf4j-simple:${slf4jVersion}"
+
+    // JSON processing
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
+    // Configuration management
+    implementation "org.aeonbits.owner:owner:1.0.12"
+
+    // AspectJ for Allure
+    aspectjAgent "org.aspectj:aspectjweaver:${aspectjVersion}"
+}
+
+test {
+    useJUnitPlatform()
+
+    // System properties for test execution
+    systemProperties = [
+        'cucumber.junit-platform.naming-strategy': 'long',
+        'allure.results.directory': "${buildDir}/allure-results"
+    ]
+
+    // JVM arguments for Allure AspectJ weaver
+    jvmArgs = [
+        "-javaagent:${configurations.aspectjAgent.singleFile}"
+    ]
+
+    // Test execution options
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+
+    // Parallel execution configuration
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+
+    // Pass system properties to tests
+    systemProperty 'browser', System.getProperty('browser', 'chrome')
+    systemProperty 'headless', System.getProperty('headless', 'false')
+}
+
+// Task to run Cucumber tests
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                '--plugin', 'pretty',
+                '--plugin', 'html:build/reports/cucumber',
+                '--plugin', 'json:build/reports/cucumber/cucumber.json',
+                '--plugin', 'junit:build/reports/cucumber/cucumber.xml',
+                '--plugin', 'io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm',
+                '--glue', 'com.ecommerce.stepDefinitions',
+                '--glue', 'com.ecommerce.hooks',
+                'src/test/resources/features'
+            ]
+        }
+    }
+}
+
+// Task to run smoke tests only
+task smokeTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'smoke'
+    }
+    systemProperty 'cucumber.filter.tags', '@smoke'
+}
+
+// Task to run login tests only
+task loginTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'login'
+    }
+    systemProperty 'cucumber.filter.tags', '@login'
+}
+
+// Task to run tests in headless mode
+task headlessTest(type: Test) {
+    useJUnitPlatform()
+    systemProperty 'headless', 'true'
+}
+
+// Task to run tests with specific browser
+task chromeTest(type: Test) {
+    useJUnitPlatform()
+    systemProperty 'browser', 'chrome'
+}
+
+task firefoxTest(type: Test) {
+    useJUnitPlatform()
+    systemProperty 'browser', 'firefox'
+}
+
+task edgeTest(type: Test) {
+    useJUnitPlatform()
+    systemProperty 'browser', 'edge'
+}
+
+// Allure configuration
+allure {
+    adapter {
+        aspectjWeaver.set(true)
+        frameworks {
+            junit5 {
+                adapterVersion.set(allureVersion)
+            }
+            cucumber7jvm {
+                adapterVersion.set(allureVersion)
+            }
+        }
+    }
+}
+
+// Clean build artifacts
+clean {
+    delete 'build'
+    delete 'test-results'
+    delete 'allure-results'
+}
