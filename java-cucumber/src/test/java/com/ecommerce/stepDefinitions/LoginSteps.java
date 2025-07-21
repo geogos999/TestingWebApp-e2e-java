@@ -31,7 +31,7 @@ public class LoginSteps {
 
     @When("I navigate to the login page")
     public void i_navigate_to_the_login_page() {
-        homePage.clickLoginLink();
+         homePage.clickLoginLink();
         Assertions.assertTrue(loginPage.isLoaded(), "Login page should be loaded");
     }
 
@@ -68,6 +68,8 @@ public class LoginSteps {
     @When("I click the login button")
     public void i_click_the_login_button() {
         loginPage.clickLoginButton();
+        // Handle any browser alert that may appear (e.g., Chrome password alert)
+        loginPage.handleAlertIfPresent();
     }
 
     @Then("I should be logged in successfully")

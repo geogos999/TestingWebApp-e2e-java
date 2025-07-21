@@ -209,4 +209,36 @@ public class LoginPage {
             logger.warn("Error clearing form: {}", e.getMessage());
         }
     }
+
+    /**
+     * Handles browser alerts if present. Accepts or dismisses based on alert text.
+     * Currently auto-accepts Chrome's compromised password alert, but can be extended.
+     * @return true if an alert was handled, false otherwise
+     */
+    public boolean handleAlertIfPresent() {
+        try {
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(2));
+            shortWait.until(ExpectedConditions.alertIsPresent());
+            String alertText = driver.switchTo().alert().getText();
+            logger.info("Alert detected with text: {}", alertText);
+            // Example: Chrome's compromised password alert
+            if (alertText != null && alertText.toLowerCase().contains("Change your password")) {
+                // The password you just used was found in a data breach. Google Password Manager recommends changing your password now.
+                driver.switchTo().alert().accept();
+                logger.info("Accepted Chrome compromised password alert.");
+                return true;
+            } else {
+                // Default: accept any other alert
+                driver.switchTo().alert().accept();
+                logger.info("Accepted generic alert.");
+                return true;
+            }
+        } catch (org.openqa.selenium.TimeoutException te) {
+            // No alert present
+            return false;
+        } catch (Exception e) {
+            logger.warn("Exception while handling alert: {}", e.getMessage());
+            return false;
+        }
+    }
 }
