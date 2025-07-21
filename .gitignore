@@ -43,3 +43,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /java-cucumber/.gradle
+/java-cucumber/.gradle/8.5
+/java-cucumber/.gradle/8.5/executionHistory
+java-cucumber/.gradle/8.5/executionHistory/executionHistory.bin
