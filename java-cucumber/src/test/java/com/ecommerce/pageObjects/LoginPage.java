@@ -19,16 +19,16 @@ public class LoginPage {
     private final WebDriverWait wait;
 
     // Page Factory elements
-    @FindBy(css = "#username, [name='username'], [data-testid='username']")
-    private WebElement usernameField;
+    @FindBy(css = "input[type='email'], input[name='email'], [data-testid='email']")
+    private WebElement emailField;
 
-    @FindBy(css = "#password, [name='password'], [data-testid='password']")
+    @FindBy(css = "input[type='password'], input[name='password'], [data-testid='password']")
     private WebElement passwordField;
 
-    @FindBy(css = "button[type='submit'], [data-testid='login-button']")
+    @FindBy(css = "button[type='submit'], input[type='submit'], [data-testid='login-button']")
     private WebElement loginButton;
 
-    @FindBy(css = ".error, .alert-danger, [data-testid='error-message']")
+    @FindBy(css = ".error, .alert-danger, .text-red-500, [data-testid='error-message']")
     private WebElement errorMessage;
 
     @FindBy(css = "form, [data-testid='login-form']")
@@ -46,21 +46,21 @@ public class LoginPage {
     public boolean isLoaded() {
         try {
             wait.until(ExpectedConditions.visibilityOf(loginForm));
-            return isUsernameFieldVisible() && isPasswordFieldVisible();
+            return isEmailFieldVisible() && isPasswordFieldVisible();
         } catch (Exception e) {
             logger.warn("Error checking if login page is loaded: {}", e.getMessage());
             return false;
         }
     }
 
-    private boolean isUsernameFieldVisible() {
+    private boolean isEmailFieldVisible() {
         try {
-            return usernameField.isDisplayed();
+            return emailField.isDisplayed();
         } catch (Exception e) {
-            // Fallback: try to find username field by different locators
+            // Fallback: try to find email field by different locators
             try {
-                WebElement fallbackUsername = driver.findElement(By.cssSelector("input[type='text'], input[type='email'], input[name*='user'], input[id*='user']"));
-                return fallbackUsername.isDisplayed();
+                WebElement fallbackEmail = driver.findElement(By.cssSelector("input[type='email'], input[name='email'], input[id*='email']"));
+                return fallbackEmail.isDisplayed();
             } catch (Exception fallbackException) {
                 return false;
             }
@@ -81,21 +81,21 @@ public class LoginPage {
         }
     }
 
-    public void enterUsername(String username) {
-        logger.info("Entering username: {}", username);
+    public void enterEmail(String email) {
+        logger.info("Entering email: {}", email);
         try {
-            wait.until(ExpectedConditions.elementToBeClickable(usernameField));
-            usernameField.clear();
-            usernameField.sendKeys(username);
+            wait.until(ExpectedConditions.elementToBeClickable(emailField));
+            emailField.clear();
+            emailField.sendKeys(email);
         } catch (Exception e) {
-            logger.error("Error entering username: {}", e.getMessage());
-            // Fallback: try to find username field by different locators
+            logger.error("Error entering email: {}", e.getMessage());
+            // Fallback: try to find email field by different locators
             try {
-                WebElement fallbackUsername = driver.findElement(By.cssSelector("input[type='text'], input[type='email'], input[name*='user'], input[id*='user']"));
-                fallbackUsername.clear();
-                fallbackUsername.sendKeys(username);
+                WebElement fallbackEmail = driver.findElement(By.cssSelector("input[type='email'], input[name='email'], input[id*='email']"));
+                fallbackEmail.clear();
+                fallbackEmail.sendKeys(email);
             } catch (Exception fallbackException) {
-                throw new RuntimeException("Unable to enter username", e);
+                throw new RuntimeException("Unable to enter email", e);
             }
         }
     }
@@ -141,10 +141,30 @@ public class LoginPage {
 
     public boolean isLoginSuccessful() {
         try {
-            // Check if we're redirected away from login page or see success indicators
-            return !driver.getCurrentUrl().contains("/login") ||
-                   isSuccessMessageVisible() ||
-                   isDashboardVisible();
+            // Wait a moment for redirect to happen
+            Thread.sleep(2000);
+            
+            // Check if we're redirected away from login page (primary indicator)
+            String currentUrl = driver.getCurrentUrl();
+            boolean redirectedFromLogin = !currentUrl.contains("/login");
+            
+            // Additional checks for successful login indicators
+            boolean hasUserIndicator = false;
+            try {
+                // Look for user email or logout option in navbar
+                driver.findElement(By.xpath("//nav//span[contains(text(),'@')] | //nav//button[contains(text(),'Logout')] | //nav//a[contains(text(),'Profile')]"));
+                hasUserIndicator = true;
+            } catch (Exception e) {
+                // Check if login link is gone from navbar
+                try {
+                    driver.findElement(By.xpath("//nav//a[contains(text(),'Login')]"));
+                    hasUserIndicator = false; // Login link still present
+                } catch (Exception ex) {
+                    hasUserIndicator = true; // Login link not found
+                }
+            }
+            
+            return redirectedFromLogin || hasUserIndicator;
         } catch (Exception e) {
             logger.warn("Error checking login success: {}", e.getMessage());
             return false;
@@ -203,7 +223,7 @@ public class LoginPage {
     public void clearForm() {
         logger.info("Clearing login form");
         try {
-            usernameField.clear();
+            emailField.clear();
             passwordField.clear();
         } catch (Exception e) {
             logger.warn("Error clearing form: {}", e.getMessage());

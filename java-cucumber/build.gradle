@@ -55,6 +55,9 @@ dependencies {
     // Allure Cucumber Integration
     testImplementation "io.qameta.allure:allure-cucumber7-jvm:${allureVersion}"
 
+    // XRay REST API integration (using Java 11 HttpClient, no need for OkHttp)
+    // implementation "com.squareup.okhttp3:okhttp:4.12.0"
+
     // Logging
     implementation "org.slf4j:slf4j-simple:${slf4jVersion}"
 
@@ -176,3 +179,91 @@ clean {
     delete 'test-results'
     delete 'allure-results'
 }
+
+// XRay Integration Tasks for Dirty Boots Studios (XSP project)
+task xrayCreateTests() {
+    group = 'xray'
+    description = 'Create test issues in XRay from Cucumber scenarios'
+    dependsOn testClasses
+    
+    doLast {
+        logger.info("Creating XRay test issues from feature files...")
+        javaexec {
+            main = "com.ecommerce.xray.utils.XRayTestCreator"
+            classpath = sourceSets.test.runtimeClasspath
+            args = ["src/test/resources/features/"]
+            
+            // Set system properties for XRay configuration
+            systemProperty 'xray.create.tests.enabled', 'true'
+            
+            // Fail gracefully if XRay credentials are not configured
+            ignoreExitValue = true
+        }
+    }
+}
+
+task xrayUploadResults() {
+    group = 'xray'
+    description = 'Upload test results to XRay'
+    dependsOn test
+    
+    doLast {
+        logger.info("Uploading test results to XRay...")
+        javaexec {
+            main = "com.ecommerce.xray.utils.XRayResultUploader"
+            classpath = sourceSets.test.runtimeClasspath
+            args = ["build/reports/cucumber/cucumber.json"]
+            
+            // Set system properties for XRay configuration
+            systemProperty 'xray.upload.results.enabled', 'true'
+            
+            // Fail gracefully if XRay credentials are not configured
+            ignoreExitValue = true
+        }
+    }
+}
+
+task xrayFullWorkflow() {
+    group = 'xray'
+    description = 'Complete XRay workflow: create tests, run tests, upload results'
+    dependsOn xrayCreateTests, test, xrayUploadResults
+    
+    // Ensure proper execution order
+    test.mustRunAfter xrayCreateTests
+    xrayUploadResults.mustRunAfter test
+}
+
+// CI/CD Integration Tasks (DISABLED - enable when ready)
+// Uncomment and configure these tasks when you're ready for CI/CD integration
+
+/*
+task xrayCICreateTests() {
+    group = 'xray-ci'
+    description = 'CI/CD: Create test issues in XRay'
+    onlyIf { System.getenv('CI') == 'true' && System.getenv('XRAY_ENABLED') == 'true' }
+    
+    dependsOn testClasses
+    doLast {
+        javaexec {
+            main = "com.ecommerce.xray.utils.XRayTestCreator"
+            classpath = sourceSets.test.runtimeClasspath
+            args = ["src/test/resources/features/"]
+        }
+    }
+}
+
+task xrayCIUploadResults() {
+    group = 'xray-ci'
+    description = 'CI/CD: Upload test results to XRay'
+    onlyIf { System.getenv('CI') == 'true' && System.getenv('XRAY_ENABLED') == 'true' }
+    
+    dependsOn test
+    doLast {
+        javaexec {
+            main = "com.ecommerce.xray.utils.XRayResultUploader"
+            classpath = sourceSets.test.runtimeClasspath
+            args = ["build/reports/cucumber/cucumber.json"]
+        }
+    }
+}
+*/
