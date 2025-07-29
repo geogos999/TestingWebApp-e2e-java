@@ -1,0 +1,63 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Java
+*.class
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+
+# IDE
+.idea/
+.vscode/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Maven (if any)
+target/
+
+# Test Results
+test-results/
+allure-results/
+cucumber-reports/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Screenshots (test artifacts)
+screenshots/
+*.png
+*.jpg
+*.jpeg
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# WebDriver binaries (if not using WebDriverManager)
+drivers/
